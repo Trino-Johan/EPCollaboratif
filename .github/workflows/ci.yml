@@ -1,0 +1,32 @@
+name: iOS Build and Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build and Test
+        uses: sersoft-gmbh/xcodebuild-action@v3
+        with:
+          project: EPCollaboratif.xcodeproj
+          scheme: EPCollaboratif
+          # On utilise l'iPad (A16) qui est confirmé comme disponible dans tes logs
+          destination: 'platform=iOS Simulator,name=iPhone 16,OS=latest'
+          action: test
+          result-bundle-path: TestResults.xcresult
+
+      - name: Upload Test Results
+        # Cette action est l'alternative officielle et stable pour générer le rapport
+        uses: actions/upload-artifact@v4
+        with:
+          name: Test-Report
+          path: TestResults.xcresult
+        # On l'exécute toujours, succès ou échec des tests
+        if: always()
