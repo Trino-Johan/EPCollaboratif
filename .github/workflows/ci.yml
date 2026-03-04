@@ -17,17 +17,16 @@ jobs:
         with:
           project: EPCollaboratif.xcodeproj
           scheme: EPCollaboratif
+          # On utilise l'iPad (A16) qui est confirmé comme disponible dans tes logs
           destination: 'platform=iOS Simulator,name=iPhone 16,OS=latest'
           action: test
           result-bundle-path: TestResults.xcresult
 
-      # --- ÉTAPE DE DÉBOGAGE : On liste tous les fichiers du serveur ---
-      - name: List files for debug
-        run: ls -R
-        if: always()
-
-      - name: Process Test Results
-        uses: kishikawakatsumi/xcresulttool@v1
+      - name: Upload Test Results
+        # Cette action est l'alternative officielle et stable pour générer le rapport
+        uses: actions/upload-artifact@v4
         with:
+          name: Test-Report
           path: TestResults.xcresult
+        # On l'exécute toujours, succès ou échec des tests
         if: always()
