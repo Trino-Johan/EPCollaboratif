@@ -17,15 +17,15 @@ jobs:
         with:
           project: EPCollaboratif.xcodeproj
           scheme: EPCollaboratif
-          destination: 'platform=iOS Simulator,name=iPhone 16,OS=latest'
+          destination: 'platform=iOS Simulator,name=iPhone 15,OS=latest'
           action: test
-          # Cette ligne est cruciale pour générer le fichier de résultats
-          result-bundle-path: 'TestResults/TestResults.xcresult'
+          # On enregistre le résultat à la racine
+          result-bundle-path: 'TestResults.xcresult'
 
       - name: Process Test Results
         uses: kishikawakatsumi/xcresulttool@v1
         with:
-          # Le chemin doit correspondre exactement à celui défini ci-dessus
-          path: TestResults/TestResults.xcresult
-        # S'exécute même si les tests échouent pour nous donner le rapport
+          # On cherche le fichier au même endroit (à la racine)
+          path: 'TestResults.xcresult'
+        # S'exécute même si les tests échouent pour générer le rapport
         if: success() || failure()
