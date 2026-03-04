@@ -19,10 +19,13 @@ jobs:
           scheme: EPCollaboratif
           destination: 'platform=iOS Simulator,name=iPhone 14'
           action: test
+          # Cette ligne est cruciale pour générer le fichier de résultats
           result-bundle-path: 'TestResults/TestResults.xcresult'
 
       - name: Process Test Results
         uses: kishikawakatsumi/xcresulttool@v1
         with:
+          # Le chemin doit correspondre exactement à celui défini ci-dessus
           path: TestResults/TestResults.xcresult
+        # S'exécute même si les tests échouent pour nous donner le rapport
         if: success() || failure()
